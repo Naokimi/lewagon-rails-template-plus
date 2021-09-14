@@ -42,32 +42,29 @@ gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'conf
 # Layout
 ########################################
 run 'rm app/views/layouts/application.html.erb'
-run 'touch app/views/layouts/application.html.slim'
 
-inject_into_file 'app/views/layouts/application.html.slim' do
-  <<-HTML
-    doctype html
-    html
-      head
-        title LoadingPrep
-        meta name="viewport" content="width=device-width,initial-scale=1"
-        = csrf_meta_tags
-        = csp_meta_tag
+file 'app/views/layouts/application.html.slim', <<~HTML
+  doctype html
+  html
+    head
+      title LoadingPrep
+      meta name="viewport" content="width=device-width,initial-scale=1"
+      = csrf_meta_tags
+      = csp_meta_tag
 
-        meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+      meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
 
-        = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true
+      = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true
 
-      body
-        = render 'shared/navbar'
-        = render 'shared/flashes'
+    body
+      = render 'shared/navbar'
+      = render 'shared/flashes'
 
-        div class="container"
-          = yield
+      div class="container"
+        = yield
 
-  HTML
-end
+HTML
 
 # Flashes
 ########################################
@@ -89,8 +86,8 @@ run 'curl -L https://github.com/lewagon/awesome-navbars/raw/master/templates/_na
 
 # README
 ########################################
-markdown_file_content = <<-MARKDOWN
-Rails app generated with [Naokimi/lewagon-rails-templates-plus](https://github.com/Naokimi/lewagon-rails-templates-plus).
+markdown_file_content = <<~MARKDOWN
+  Rails app generated with [Naokimi/lewagon-rails-templates-plus](https://github.com/Naokimi/lewagon-rails-templates-plus).
 MARKDOWN
 file 'README.md', markdown_file_content, force: true
 
@@ -231,8 +228,7 @@ after_bundle do
 
   # Rubocop
   ########################################
-  run 'touch .rubocop.yml'
-  append_file '.rubocop.yml', <<~YML
+  file '.rubocop.yml', <<~YML
     AllCops:
       Exclude:
         - 'bin/**/*'
