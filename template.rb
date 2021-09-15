@@ -61,7 +61,7 @@ file 'app/views/layouts/application.html.slim', <<~HTML
       = render 'shared/navbar'
       = render 'shared/flashes'
 
-      div class="container"
+      .container
         = yield
 
 HTML
@@ -81,8 +81,32 @@ file 'app/views/shared/_flashes.html.slim', <<~HTML
         span aria-hidden="true" &times;
 HTML
 
-# rewrite from scratch
-run 'curl -L https://github.com/lewagon/awesome-navbars/raw/master/templates/_navbar_wagon.html.erb > app/views/shared/_navbar.html.erb'
+file 'app/views/shared/_navbar.html.slim', <<~HTML
+  .navbar.navbar-expand-sm.navbar-light.navbar-lewagon
+    = link_to "#", class: "navbar-brand" do
+      = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
+
+    button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+      span.navbar-toggler-icon
+
+    .collapse.navbar-collapse id="navbarSupportedContent"
+      ul.navbar-nav.mr-auto
+        - if user_signed_in?
+          li.nav-item.active
+            = link_to "Home", "#", class: "nav-link"
+          li.nav-item
+            = link_to "Messages", "#", class: "nav-link"
+          li.nav-item.dropdown
+            = image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false
+            .dropdown-menu.dropdown-menu-right aria-labelledby="navbarDropdown"
+              = link_to "Action", "#", class: "dropdown-item"
+              = link_to "Another action", "#", class: "dropdown-item"
+              = link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item"
+        - else
+          li.nav-item
+            = link_to "Login", new_user_session_path, class: "nav-link"
+HTML
+
 
 # README
 ########################################
@@ -106,6 +130,10 @@ environment generators
 # AFTER BUNDLE
 ########################################
 after_bundle do
+  # Disable spring for recreated apps
+  ########################################
+  run 'export DISABLE_SPRING=true'
+
   # Generators: db + simple form + pundit + annotate + pages controller
   ########################################
   rails_command 'db:drop db:create db:migrate'
@@ -142,7 +170,7 @@ after_bundle do
     end
   RUBY
 
-  # migrate + devise views
+  # Migrate + devise views
   ########################################
   rails_command 'db:migrate'
   generate('devise:views')
