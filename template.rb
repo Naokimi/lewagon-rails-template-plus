@@ -72,17 +72,15 @@ file 'app/views/shared/_flashes.html.slim', <<~HTML
   - if notice
     .alert.alert-info.alert-dismissible.fade.show.m-1 role="alert"
       = notice
-      button.close type="button" data-dismiss="alert" aria-label="Close"
-        span aria-hidden="true" &times;
+      button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
   - if alert
     .alert.alert-warning.alert-dismissible.fade.show.m-1 role="alert"
       = alert
-      button.close type="button" data-dismiss="alert" aria-label="Close"
-        span aria-hidden="true" &times;
+      button.btn-close type="button" data-bs-dismiss="alert" aria-label="Close"
 HTML
 
 file 'app/views/shared/_navbar.html.slim', <<~HTML
-  .navbar.navbar-expand-sm.navbar-light.navbar-lewagon
+  .navbar.navbar-expand-sm.navbar-light.navbar-lewagon.px-3
     = link_to "#", class: "navbar-brand" do
       = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
 
@@ -234,7 +232,7 @@ after_bundle do
 
   # Webpacker / Yarn
   ########################################
-  run 'yarn add bootstrap'
+  run 'yarn add bootstrap @popperjs/core'
   append_file 'app/javascript/packs/application.js', <<~JS
     // ----------------------------------------------------
     // Note(lewagon): ABOVE IS RAILS DEFAULT CONFIGURATION
