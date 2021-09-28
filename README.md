@@ -21,7 +21,7 @@ Navbar, flash messages, scss bootstrap variables, and a set of gems to help you 
 - [\*factory_bot_rails](https://github.com/thoughtbot/factory_bot_rails): a fixtures replacement to help you with defining testing objects.
 - [\*faker](https://github.com/faker-ruby/faker): Generate fake data for your seeds and tests.
 - [font-awesome-sass](https://github.com/FortAwesome/font-awesome-sass): Sass-powered version of the web's most popular icon set and toolkit.
-- [pundit](https://github.com/varvet/pundit): Minimal authorization through Object Oriented design and pure Ruby classes.
+- [\*pundit](https://github.com/varvet/pundit): Minimal authorization through Object Oriented design and pure Ruby classes.
 - [pry-byebug](https://github.com/deivid-rodriguez/pry-byebug): Step-by-step debugging and stack navigation capabilities.
 - [pry-rails](https://github.com/rweng/pry-rails): Causes `rails console` to open pry.
 - [\*rspec-rails](https://github.com/rspec/rspec-rails): Behaviour Driven Development for Ruby on Rails.
