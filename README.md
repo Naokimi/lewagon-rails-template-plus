@@ -27,4 +27,4 @@ Navbar, flash messages, scss bootstrap variables, and a set of gems to help you 
 - [\*rspec-rails](https://github.com/rspec/rspec-rails): Behaviour Driven Development for Ruby on Rails.
 - [simple_form](https://github.com/heartcombo/simple_form): Rails forms made easy.
 - [\*simplecov](https://github.com/simplecov-ruby/simplecov): A tool to help you visualize how much of your app is covered by tests.
-- [\*slim-rails](https://github.com/slim-template/slim-rails): Reduce markdown in views (no more merge conflicts on closing `</div>`s).
+- [\*slim-rails](https://github.com/slim-template/slim-rails): Reduce HTML markup in views (no more merge conflicts on closing `</div>`s).
