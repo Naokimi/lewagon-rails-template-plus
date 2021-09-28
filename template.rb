@@ -8,8 +8,8 @@ gem 'devise'
 gem 'faker'
 gem 'font-awesome-sass'
 gem 'pundit'
-gem 'slim-rails'
 gem 'simple_form'
+gem 'slim-rails'
 
 gem_group :development, :test do
   gem 'annotate'
@@ -17,7 +17,6 @@ gem_group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rspec'
   gem 'rspec-rails'
 end
 
