@@ -224,6 +224,21 @@ after_bundle do
     end
   RUBY
 
+  file 'spec/support/factory_bot.rb', <<~RUBY
+    require 'factory_bot'
+
+    RSpec.configure do |config|
+      config.include FactoryBot::Syntax::Methods
+    end
+  RUBY
+
+  inject_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'" do
+    <<~RUBY
+      require_relative 'support/factory_bot'
+      require_relative 'support/devise'
+    RUBY
+  end
+
   # Seeds config
   ######################################
   remove_file 'db/seeds.rb'
