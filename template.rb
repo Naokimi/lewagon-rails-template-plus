@@ -214,6 +214,16 @@ after_bundle do
     RUBY
   end
 
+  # Rspec support files
+  #######################################
+  file 'spec/support/devise.rb', <<~RUBY
+    require 'devise'
+
+    RSpec.configure do |config|
+      config.include Devise::Test::ControllerHelpers, type: :controller
+    end
+  RUBY
+
   # Seeds config
   ######################################
   remove_file 'db/seeds.rb'
