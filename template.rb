@@ -234,10 +234,20 @@ after_bundle do
 
   inject_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'" do
     <<~RUBY
-      require_relative 'support/factory_bot'
-      require_relative 'support/devise'
+      Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
     RUBY
   end
+
+  # Factories
+  #######################################
+  file 'spec/support/factories/user.rb', <<~RUBY
+    FactoryBot.define do
+      factory :user do
+        email    { 'gmail@chucknorris.com' }
+        password { 'roundhousekick' }
+      end
+    end
+  RUBY
 
   # Seeds config
   ######################################
