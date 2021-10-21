@@ -4,7 +4,7 @@ A template for Rails 6, intended to help you quickly build apps for production w
 ### Usage
 run 
 ```
-rails new APP-NAME -d=postgresql -m https://raw.githubusercontent.com/naokimi/rails-multiUIs-template/master/template.rb
+rails new APP-NAME -d=postgresql -m https://raw.githubusercontent.com/naokimi/lewagon-rails-template-plus/master/template.rb
 ```
 
 ## Contents
