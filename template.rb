@@ -116,6 +116,7 @@ file 'README.md', markdown_file_content, force: true
 ########################################
 generators = <<~RUBY
   config.generators do |generate|
+    generate.test_framework :rspec
     generate.assets false
     generate.helper false
   end
