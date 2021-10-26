@@ -116,6 +116,7 @@ file 'README.md', markdown_file_content, force: true
 ########################################
 generators = <<~RUBY
   config.generators do |generate|
+    generate.test_framework :rspec
     generate.assets false
     generate.helper false
   end
@@ -187,6 +188,10 @@ after_bundle do
   ########################################
   environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
   environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
+
+  # Get rid of `test` directory
+  #######################################
+  run 'rm -rf test'
 
   # Test config
   #######################################
