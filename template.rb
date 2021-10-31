@@ -63,6 +63,8 @@ file 'app/views/layouts/application.html.slim', <<~HTML
       .container
         = yield
 
+      = render 'shared/footer'
+
 HTML
 
 # Flashes
@@ -102,6 +104,11 @@ file 'app/views/shared/_navbar.html.slim', <<~HTML
         - else
           li.nav-item
             = link_to "Login", new_user_session_path, class: "nav-link"
+HTML
+
+file 'app/views/shared/_footer.html.slim', <<~HTML
+  footer.d-flex.flex-wrap.justify-content-between.align-items-center.py-3.my-4.border-top
+    p.col-md-4.mb-0.text-muted © #{Date.today.year} Company, Inc
 HTML
 
 
