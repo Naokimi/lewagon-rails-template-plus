@@ -1,6 +1,7 @@
-if Rails.version >= '7'
+unsupported_version = 7
+if Rails.version >= unsupported_version
   puts '-----------------'
-  puts "This template doesn't support Rails version 7 and above"
+  puts "This template doesn't support Rails version #{unsupported_version} and above"
   puts '-----------------'
   return
 end
@@ -89,32 +90,33 @@ HTML
 
 file 'app/views/shared/_navbar.html.slim', <<~HTML
   .navbar.navbar-expand-sm.navbar-light.navbar-lewagon.px-3
-    = link_to "#", class: "navbar-brand" do
-      = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
+    .container
+      = link_to "#", class: "navbar-brand" do
+        = image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png"
 
-    button.navbar-toggler type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
-      span.navbar-toggler-icon
+      button.navbar-toggler type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"
+        span.navbar-toggler-icon
 
-    .collapse.navbar-collapse id="navbarSupportedContent"
-      ul.navbar-nav.mr-auto
-        - if user_signed_in?
-          li.nav-item.active
-            = link_to "Home", "#", class: "nav-link"
-          li.nav-item
-            = link_to "Messages", "#", class: "nav-link"
-          li.nav-item.dropdown
-            = image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false
-            .dropdown-menu.dropdown-menu-right aria-labelledby="navbarDropdown"
-              = link_to "Action", "#", class: "dropdown-item"
-              = link_to "Another action", "#", class: "dropdown-item"
-              = link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item"
-        - else
-          li.nav-item
-            = link_to "Login", new_user_session_path, class: "nav-link"
+      .collapse.navbar-collapse id="navbarSupportedContent"
+        ul.navbar-nav.mr-auto
+          - if user_signed_in?
+            li.nav-item.active
+              = link_to "Home", "#", class: "nav-link"
+            li.nav-item
+              = link_to "Messages", "#", class: "nav-link"
+            li.nav-item.dropdown
+              = image_tag "https://kitt.lewagon.com/placeholder/users/ssaunier", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { toggle: "dropdown" }, 'aria-haspopup': true, 'aria-expanded': false
+              .dropdown-menu.dropdown-menu-right aria-labelledby="navbarDropdown"
+                = link_to "Action", "#", class: "dropdown-item"
+                = link_to "Another action", "#", class: "dropdown-item"
+                = link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item"
+          - else
+            li.nav-item
+              = link_to "Login", new_user_session_path, class: "nav-link"
 HTML
 
 file 'app/views/shared/_footer.html.slim', <<~HTML
-  footer.d-flex.flex-wrap.justify-content-between.align-items-center.py-3.my-4.border-top
+  footer.container.d-flex.flex-wrap.justify-content-between.align-items-center.py-3.my-4.border-top
     p.col-md-4.mb-0.text-muted © #{Date.today.year} Company, Inc
 HTML
 
@@ -154,6 +156,9 @@ after_bundle do
   generate('pundit:install')
   generate('annotate:install')
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
+
+  # Replace simple form initializer to work with Bootstrap 5
+  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
 
   # Routes
   ########################################
@@ -287,20 +292,17 @@ after_bundle do
   # Webpacker / Yarn
   ########################################
   run 'yarn add bootstrap @popperjs/core'
+  run 'rails webpacker:install:stimulus'
   append_file 'app/javascript/packs/application.js', <<~JS
-    // ----------------------------------------------------
-    // Note(lewagon): ABOVE IS RAILS DEFAULT CONFIGURATION
-    // WRITE YOUR OWN JS STARTING FROM HERE 👇
-    // ----------------------------------------------------
-    // External imports
     import "bootstrap";
-    // Internal imports, e.g:
-    // import { initSelect2 } from '../components/init_select2';
-    document.addEventListener('turbolinks:load', () => {
-      // Call your functions here, e.g:
-      // initSelect2();
-    });
   JS
+
+  inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
+    <<~JS
+      // Preventing Babel from transpiling NodeModules packages
+      environment.loaders.delete('nodeModules');
+    JS
+  end
 
   # Dotenv
   ########################################
