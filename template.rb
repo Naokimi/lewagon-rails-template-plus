@@ -1,5 +1,5 @@
 unsupported_version = 7
-if Rails.version >= unsupported_version
+if Rails.version.to_i >= unsupported_version
   puts '-----------------'
   puts "This template doesn't support Rails version #{unsupported_version} and above"
   puts '-----------------'
