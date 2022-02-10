@@ -1,3 +1,8 @@
+=begin
+find gem that automatically adds frozen string on top of file
+modify rubocop rule to ignore toplevel documentation
+=end
+
 unsupported_version = 7
 if Rails.version.to_i >= unsupported_version
   puts '-----------------'
@@ -259,20 +264,20 @@ after_bundle do
 
   inject_into_file 'spec/rails_helper.rb', after: "require 'rspec/rails'" do
     <<~RUBY
+
       Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
     RUBY
   end
 
   # Factories
   #######################################
-  file 'spec/support/factories/user.rb', <<~RUBY
-    FactoryBot.define do
-      factory :user do
-        email    { 'gmail@chucknorris.com' }
-        password { 'roundhousekick' }
-      end
-    end
-  RUBY
+  inject_into_file 'spec/support/factories/users.rb', after: 'factory :user do' do
+    <<~RUBY
+
+      email    { 'gmail@chucknorris.com' }
+      password { 'roundhousekick' }
+    RUBY
+  end
 
   # Seeds config
   ######################################
