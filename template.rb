@@ -179,6 +179,8 @@ after_bundle do
     # Ignore Mac and Linux file system files
     *.swp
     .DS_Store
+
+    /node_modules
   TXT
 
   # Devise install + user
