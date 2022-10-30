@@ -6,8 +6,14 @@ For the Rails 6 template please check the `rails-6` branch.
 ### Usage
 run
 ```
-rails new APP-NAME -d=postgresql -m https://raw.githubusercontent.com/naokimi/lewagon-rails-template-plus/master/template.rb
+rails new \
+  -d postgresql \
+  -j webpack \
+  -T \
+  -m https://raw.githubusercontent.com/naokimi/lewagon-rails-template-plus/master/template.rb \
+  CHANGE_THIS_TO_YOUR_RAILS_APP_NAME
 ```
+(the `-j webpack` flag is optional)
 
 ## Contents
 Navbar, flash messages, scss bootstrap variables, and a set of gems to help you with develoment (see list below)
