@@ -3,10 +3,10 @@ find gem that automatically adds frozen string on top of file
 modify rubocop rule to ignore toplevel documentation
 =end
 
-unsupported_version = 7
-if Rails.version.to_i >= unsupported_version
+supported_version = 7
+unless Rails.version.to_i == supported_version
   puts '-----------------'
-  puts "This template doesn't support Rails version #{unsupported_version} and above"
+  puts "This template supports only Rails version #{unsupported_version}"
   puts '-----------------'
   return
 end
@@ -15,13 +15,13 @@ run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
 
 # GEMFILE
 ########################################
-gem 'autoprefixer-rails', '10.2.5'
+gem 'autoprefixer-rails'
 gem 'database_cleaner-active_record'
 gem 'devise'
 gem 'faker'
-gem 'font-awesome-sass'
+gem 'font-awesome-sass', '~> 6.1'
 gem 'pundit'
-gem 'simple_form'
+gem 'simple_form', github: 'heartcombo/simple_form'
 gem 'slim-rails'
 
 gem_group :development, :test do
@@ -37,7 +37,7 @@ gem_group :test do
   gem 'simplecov', require: false
 end
 
-gsub_file('Gemfile', /# gem 'redis'/, "gem 'redis'")
+gsub_file('Gemfile', /# gem 'sassc-rails'/, "gem 'sassc-rails'")
 
 # Assets
 ########################################
@@ -47,9 +47,16 @@ run 'rm -rf vendor'
 run 'curl -L https://github.com/lewagon/rails-stylesheets/archive/master.zip > stylesheets.zip'
 run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
 
+inject_into_file "config/initializers/assets.rb", before: "# Precompile additional assets." do
+  <<~RUBY
+    Rails.application.config.assets.paths << Rails.root.join("node_modules")
+  RUBY
+end
+
 # Dev environment
 ########################################
-gsub_file('config/environments/development.rb', /config\.assets\.debug.*/, 'config.assets.debug = false')
+environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
+environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
 
 # Layout
 ########################################
@@ -59,15 +66,14 @@ file 'app/views/layouts/application.html.slim', <<~HTML
   doctype html
   html
     head
-      title LoadingPrep
+      title RailsTemplateApp
       meta name="viewport" content="width=device-width,initial-scale=1"
       = csrf_meta_tags
       = csp_meta_tag
 
       meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
       = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-
-      = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload', defer: true
+      = javascript_include_tag 'application', 'data-turbolinks-track': 'reload', defer: true
 
     body
       = render 'shared/navbar'
@@ -161,10 +167,6 @@ after_bundle do
   generate('pundit:install')
   generate('annotate:install')
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
-
-  # Replace simple form initializer to work with Bootstrap 5
-  run 'curl -L https://raw.githubusercontent.com/heartcombo/simple_form-bootstrap/main/config/initializers/simple_form_bootstrap.rb > config/initializers/simple_form_bootstrap.rb'
-
   # Routes
   ########################################
   route "root to: 'pages#home'"
@@ -294,20 +296,12 @@ after_bundle do
 
   RUBY
 
-  # Webpacker / Yarn
+  # Yarn
   ########################################
   run 'yarn add bootstrap @popperjs/core'
-  run 'rails webpacker:install:stimulus'
-  append_file 'app/javascript/packs/application.js', <<~JS
+  append_file 'app/javascript/application.js', <<~JS
     import "bootstrap";
   JS
-
-  inject_into_file 'config/webpack/environment.js', before: 'module.exports' do
-    <<~JS
-      // Preventing Babel from transpiling NodeModules packages
-      environment.loaders.delete('nodeModules');
-    JS
-  end
 
   # Dotenv
   ########################################
@@ -342,6 +336,7 @@ after_bundle do
 
   # Git
   ########################################
+  git :init
   git add: '.'
   git commit: "-m 'Initial commit with template from https://github.com/Naokimi/lewagon-rails-templates-plus'"
   run 'gh repo create'

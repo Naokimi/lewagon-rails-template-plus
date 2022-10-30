@@ -1,8 +1,10 @@
 # Rails Template+, powered by Le Wagon
-A template for Rails 6, intended to help you quickly build apps for production with a set of helpful gems. Inspired heavily by [Le Wagon's Rails Devise template](https://github.com/lewagon/rails-templates).
+A template for Rails 7, intended to help you quickly build apps for production with a set of helpful gems. Inspired heavily by [Le Wagon's Rails Devise template](https://github.com/lewagon/rails-templates).
+
+For the Rails 6 template please check the `rails-6` branch.
 
 ### Usage
-run 
+run
 ```
 rails new APP-NAME -d=postgresql -m https://raw.githubusercontent.com/naokimi/lewagon-rails-template-plus/master/template.rb
 ```
