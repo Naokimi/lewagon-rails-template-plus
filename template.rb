@@ -3,7 +3,7 @@ find gem that automatically adds frozen string on top of file
 modify rubocop rule to ignore toplevel documentation
 =end
 
-supported_version = 7
+supported_version = ENV['SUPPORTED_RAILS_VERSION'].to_i
 unless Rails.version.to_i == supported_version
   puts '-----------------'
   puts "This template supports only Rails version #{unsupported_version}"
@@ -11,56 +11,35 @@ unless Rails.version.to_i == supported_version
   return
 end
 
-run "if uname | grep -q 'Darwin'; then pgrep spring | xargs kill -9; fi"
-
-# GEMFILE
-########################################
-gem 'autoprefixer-rails'
-gem 'database_cleaner-active_record'
-gem 'devise'
-gem 'faker'
-gem 'font-awesome-sass', '~> 6.1'
-gem 'pundit'
-gem 'simple_form', github: 'heartcombo/simple_form'
-gem 'slim-rails'
-
-gem_group :development, :test do
-  gem 'annotate'
-  gem 'dotenv-rails'
-  gem 'factory_bot_rails'
-  gem 'pry-byebug'
-  gem 'pry-rails'
-  gem 'rspec-rails'
+FileUtils.rm_rf('app/assets/stylesheets')
+FileUtils.rm_rf('vendor')
+require 'open-uri'
+open('https://github.com/lewagon/rails-stylesheets/archive/master.zip') do |file|
+  Zip::File.open_buffer(file.read) do |zip_file|
+    zip_file.each do |entry|
+      entry.extract("app/assets/stylesheets/#{entry.name}") { true }
+    end
+  end
 end
 
-gem_group :test do
-  gem 'simplecov', require: false
+def remove_assets
+  FileUtils.rm_rf('app/assets/stylesheets')
+  FileUtils.rm_rf('vendor')
 end
 
-gsub_file('Gemfile', /# gem 'sassc-rails'/, "gem 'sassc-rails'")
-
-# Assets
-########################################
-run 'rm -rf app/assets/stylesheets'
-run 'rm -rf vendor'
-# check if we might want to import our own stylesheets
-run 'curl -L https://github.com/lewagon/rails-stylesheets/archive/master.zip > stylesheets.zip'
-run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
-
-inject_into_file "config/initializers/assets.rb", before: "# Precompile additional assets." do
-  <<~RUBY
-    Rails.application.config.assets.paths << Rails.root.join("node_modules")
-  RUBY
+def import_stylesheets
+  require 'open-uri'
+  open('https://github.com/lewagon/rails-stylesheets/archive/master.zip') do |file|
+    Zip::File.open_buffer(file.read) do |zip_file|
+      zip_file.each do |entry|
+        entry.extract("app/assets/stylesheets/#{entry.name}") { true }
+      end
+    end
+  end
 end
 
-# Dev environment
-########################################
-environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
-
-# Layout
-########################################
-run 'rm app/views/layouts/application.html.erb'
+remove_assets
+import_stylesheets
 
 file 'app/views/layouts/application.html.slim', <<~HTML
   doctype html
@@ -83,11 +62,8 @@ file 'app/views/layouts/application.html.slim', <<~HTML
         = yield
 
       = render 'shared/footer'
-
 HTML
 
-# Flashes
-########################################
 file 'app/views/shared/_flashes.html.slim', <<~HTML
   - if notice
     .alert.alert-info.alert-dismissible.fade.show.m-1 role="alert"
@@ -120,6 +96,24 @@ file 'app/views/shared/_navbar.html.slim', <<~HTML
               .dropdown-menu.dropdown-menu-right aria-labelledby="navbarDropdown"
                 = link_to "Action", "#", class: "dropdown-item"
                 = link_to "Another action", "#", class: "dropdown-item"
+                = link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item"
+          - else
+            li.nav-item
+              = link_to "Login", new_user_session_path, class: "nav-link"
+HTML
+
+file 'app/views/shared/_footer.html.slim', <<~HTML
+  footer.container.d-flex.flex-wrap.justify-content-between.align-items-center.py-3.my-4.border-top
+    p.col-md-4.mb-0.text-muted © #{Date.today.year} Company, Inc
+HTML
+
+inject_into_file "config/initializers/assets.rb", before: "# Precompile additional assets." do
+  <<~RUBY
+    Rails.application.config.assets.paths << Rails.root.join("node_modules")
+  RUBY
+end
+
+# Rest of the code remains the sameaction", "#", class: "dropdown-item"
                 = link_to "Log out", destroy_user_session_path, method: :delete, class: "dropdown-item"
           - else
             li.nav-item
