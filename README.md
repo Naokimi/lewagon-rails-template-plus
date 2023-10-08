@@ -6,106 +6,14 @@ For the Rails 6 template please check the `rails-6` branch.
 ## Prerequisites:
 - [Node JS](https://nodejs.org/en)
 - A code editor, like [VS Code](https://code.visualstudio.com/)
+- [GitHub CLI](https://cli.github.com/)
 
 
 ## Setup
 
-### MacOS
-1. Make sure you have [homebrew](https://docs.brew.sh/Installation) installed
-
-2. Install [rbenv](https://github.com/rbenv/rbenv) to install and manage ruby environments:
-```
-brew install rbenv ruby-install
-```
-
-3. Install the latest ruby version via rbenv and set it as the default version.
-The latest stable version is [3.2.2](https://www.ruby-lang.org/en/downloads/)
-
-```
-# install 3.2.2
-rbenv install 3.2.2
-# set the global version to 3.2.2
-rbenv global 3.2.2
-# set the local version to 3.2.2
-rbenv local 3.2.2
-# set the system version to 3.2.2
-rbenv shell 3.2.2
-```
-
-4. Restart the terminal
-```
-exec zsh
-```
-
-5. Check the current ruby version:
-```
-ruby -v
-```
-
-6. Install some external libraries via [gems](https://rubygems.org/):
-```
-gem install colored faker http pry-byebug rake rails rest-client rspec rubocop-performance sqlite3
-```
-
-7. Install [yarn](https://yarnpkg.com/) to manage Javascript libraries and restart the terminal:
-```
-npm install --global yarn
-exec zsh
-```
-
-8. Check the correct version is installed:
-```
-yarn -v
-```
-
-###  Linux OS
-
-1. Install some dependencies
-```
-sudo apt install -y build-essential tklib zlib1g-dev libssl-dev libffi-dev libxml2 libxml2-dev libxslt1-dev libreadline-dev
-```
-
-2. Install [rbenv](https://github.com/rbenv/rbenv) to install and manage ruby environments:
-```
-git clone https://github.com/rbenv/rbenv.git ~/.rbenv
-git clone https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
-```
-
-3. Restart the terminal
-
-4. Install the latest ruby version via rbenv and set it as the default version.
-The latest stable version is [3.2.2](https://www.ruby-lang.org/en/downloads/)
-
-```
-# install 3.2.2
-rbenv install 3.2.2
-# set the global version to 3.2.2
-rbenv global 3.2.2
-# set the local version to 3.2.2
-rbenv local 3.2.2
-# set the system version to 3.2.2
-rbenv shell 3.2.2
-```
-
-5. Restart the terminal
-
-6. Check the current ruby version to see if it was properly installed:
-```
-ruby -v
-```
-
-7. Install some external libraries via [gems](https://rubygems.org/):
-gem install colored faker http pry-byebug rake rails rest-client rspec rubocop-performance sqlite3
-
-8. Install [yarn](https://yarnpkg.com/) to manage Javascript libraries and restart the terminal:
-```
-npm install --global yarn
-```
-
-9. Check the correct version is installed:
-```
-yarn -v
-```
+- [**MacOS**](/setup-instructions/macos-setup.md)
+- [**Linux OS**](/setup-instructions/linuxos-setup.md)
+- [**Windows 11 (WSL)**](/setup-instructions/windows11-setup.md)
 
 ## Usage
 1. To generate the templates, run the following command:
