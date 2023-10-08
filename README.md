@@ -6,14 +6,14 @@ For the Rails 6 template please check the `rails-6` branch.
 ## Prerequisites:
 - [Node JS](https://nodejs.org/en)
 - A code editor, like [VS Code](https://code.visualstudio.com/)
-- [GitHub CLI](https://cli.github.com/)
+- [Github CLI](https://cli.github.com/)
 
 
 ## Setup
 
-- [**MacOS**](/setup-instructions/macos-setup.md)
-- [**Linux OS**](/setup-instructions/linuxos-setup.md)
-- [**Windows 11 (WSL)**](/setup-instructions/windows11-setup.md)
+- [**MacOS Setup**](/setup-instructions/macos-setup.md)
+- [**Linux OS Setup**](/setup-instructions/linuxos-setup.md)
+- [**Windows OS Setup**](/setup-instructions/windows11-setup.md)
 
 ## Usage
 1. To generate the templates, run the following command:
