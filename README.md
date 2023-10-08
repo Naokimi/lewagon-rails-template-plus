@@ -3,8 +3,20 @@ A template for Rails 7, intended to help you quickly build apps for production w
 
 For the Rails 6 template please check the `rails-6` branch.
 
-### Usage
-run
+## Prerequisites:
+- [Node JS](https://nodejs.org/en)
+- A code editor, like [VS Code](https://code.visualstudio.com/)
+- [Github CLI](https://cli.github.com/)
+
+
+## Setup
+
+- [**MacOS Setup**](/setup-instructions/macos-setup.md)
+- [**Linux OS Setup**](/setup-instructions/linuxos-setup.md)
+- [**Windows OS Setup**](/setup-instructions/windows11-setup.md)
+
+## Usage
+1. To generate the templates, run the following command:
 ```
 rails new \
   -d postgresql \
