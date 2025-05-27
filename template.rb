@@ -1,12 +1,10 @@
-=begin
-find gem that automatically adds frozen string on top of file
-modify rubocop rule to ignore toplevel documentation
-=end
+# modify rubocop rule to ignore toplevel documentation
 
-supported_version = 7
+supported_version = 8
 unless Rails.version.to_i == supported_version
   puts '-----------------'
-  puts "This template supports only Rails version #{unsupported_version}"
+  puts "This template supports only Rails version #{supported_version}."
+  puts "Try using the template from branch `rails-#{Rails.version.to_i}`."
   puts '-----------------'
   return
 end
@@ -19,13 +17,11 @@ gem 'autoprefixer-rails'
 gem 'database_cleaner-active_record'
 gem 'devise'
 gem 'faker'
-gem 'font-awesome-sass', '~> 6.1'
 gem 'pundit'
 gem 'simple_form', github: 'heartcombo/simple_form'
 gem 'slim-rails'
 
 gem_group :development, :test do
-  gem 'annotate'
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'pry-byebug'
@@ -37,8 +33,6 @@ gem_group :test do
   gem 'simplecov', require: false
 end
 
-gsub_file('Gemfile', /# gem 'sassc-rails'/, "gem 'sassc-rails'")
-
 # Assets
 ########################################
 run 'rm -rf app/assets/stylesheets'
@@ -46,12 +40,6 @@ run 'rm -rf vendor'
 # check if we might want to import our own stylesheets
 run 'curl -L https://github.com/lewagon/rails-stylesheets/archive/master.zip > stylesheets.zip'
 run 'unzip stylesheets.zip -d app/assets && rm stylesheets.zip && mv app/assets/rails-stylesheets-master app/assets/stylesheets'
-
-inject_into_file "config/initializers/assets.rb", before: "# Precompile additional assets." do
-  <<~RUBY
-    Rails.application.config.assets.paths << Rails.root.join("node_modules")
-  RUBY
-end
 
 # Dev environment
 ########################################
@@ -66,14 +54,25 @@ file 'app/views/layouts/application.html.slim', <<~HTML
   doctype html
   html
     head
-      title RailsTemplateApp
+      title = content_for(:title) || "Rails Template App"
       meta name="viewport" content="width=device-width,initial-scale=1"
+      meta name="apple-mobile-web-app-capable" content="yes"
+      meta name="mobile-web-app-capable" content="yes"
       = csrf_meta_tags
       = csp_meta_tag
 
-      meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
-      = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
-      = javascript_include_tag 'application', 'data-turbolinks-track': 'reload', defer: true
+      = yield :head
+
+      // Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!)
+      // = tag.link rel: "manifest", href: pwa_manifest_path(format: :json)
+
+      link rel="icon" href="/icon.png" type="image/png"
+      link rel="icon" href="/icon.svg" type="image/svg+xml"
+      link rel="apple-touch-icon" href="/icon.png"
+
+      // Includes all stylesheet files in app/assets/stylesheets
+      = stylesheet_link_tag :app, "data-turbo-track": "reload"
+      = javascript_importmap_tags
 
     body
       = render 'shared/navbar'
@@ -86,7 +85,7 @@ file 'app/views/layouts/application.html.slim', <<~HTML
 
 HTML
 
-# Flashes
+# Shared HTML Files
 ########################################
 file 'app/views/shared/_flashes.html.slim', <<~HTML
   - if notice
@@ -131,7 +130,6 @@ file 'app/views/shared/_footer.html.slim', <<~HTML
     p.col-md-4.mb-0.text-muted © #{Date.today.year} Company, Inc
 HTML
 
-
 # README
 ########################################
 markdown_file_content = <<~MARKDOWN
@@ -165,7 +163,6 @@ after_bundle do
   rails_command 'db:drop db:create db:migrate'
   generate('simple_form:install', '--bootstrap')
   generate('pundit:install')
-  generate('annotate:install')
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
   # Routes
   ########################################
@@ -216,7 +213,8 @@ after_bundle do
   # Environments
   ########################################
   environment 'config.action_mailer.default_url_options = { host: "http://localhost:3000" }', env: 'development'
-  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }', env: 'production'
+  environment 'config.action_mailer.default_url_options = { host: "http://TODO_PUT_YOUR_DOMAIN_HERE" }',
+              env: 'production'
 
   # Get rid of `test` directory
   #######################################
@@ -298,12 +296,31 @@ after_bundle do
 
   RUBY
 
-  # Yarn
+  # Bootstrap + Stylesheet Config
   ########################################
-  run 'yarn add bootstrap @popperjs/core'
-  append_file 'app/javascript/application.js', <<~JS
-    import "bootstrap";
-  JS
+  run 'rm app/assets/stylesheets/application.scss app/assets/stylesheets/application.bootstrap.scss'
+  # run 'rm app/assets/stylesheets/application.bootstrap.scss'
+  file 'app/assets/stylesheets/application.bootstrap.scss', <<~CSS
+    // Graphical variables
+    @import "config/fonts";
+    @import "config/colors";
+    @import "config/bootstrap_variables";
+
+    @import 'bootstrap/scss/bootstrap';
+    @import 'bootstrap-icons/font/bootstrap-icons';
+
+    // Your CSS partials
+    @import "components/index";
+    @import "pages/index";
+  CSS
+
+  inject_into_file 'config/initializers/assets.rb',
+                   after: '# Rails.application.config.assets.paths << Emoji.images_path' do
+    <<~RUBY
+      Rails.application.config.assets.paths << Rails.root.join("node_modules")
+      Rails.application.config.assets.precompile << "bootstrap.bundle.min.js"
+    RUBY
+  end
 
   # Dotenv
   ########################################
@@ -311,7 +328,11 @@ after_bundle do
 
   # Rubocop
   ########################################
+  run 'rm .rubocop.yml'
   file '.rubocop.yml', <<~YML
+    # Omakase Ruby styling for Rails
+    inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
     AllCops:
       Exclude:
         - 'bin/**/*'
@@ -339,6 +360,7 @@ after_bundle do
   # Git
   ########################################
   git :init
+  run 'rubocop -a'
   git add: '.'
   git commit: "-m 'Initial commit with template from https://github.com/Naokimi/lewagon-rails-templates-plus'"
   run 'gh repo create'
