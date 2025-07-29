@@ -28,6 +28,7 @@ Navbar, flash messages, scss bootstrap variables, and a set of gems to help you 
 ### Included gems
 (Starred items have been added on top of the ones used by Le Wagon's template)
 
+- [\*annotaterb](https://github.com/drwl/annotaterb): Add a comment summarizing the current schema to the top of each of your models.
 - [autoprefixer-rails](https://github.com/ai/autoprefixer-rails): Parse CSS and add vendor prefixes to CSS rules using values from the Can I Use database.
 - [\*database_cleaner](https://github.com/DatabaseCleaner/database_cleaner): Reset ids when emptying database with seeds or rspec.
 - [devise](https://github.com/heartcombo/devise): Flexible authentication solution.

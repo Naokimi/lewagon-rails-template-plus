@@ -22,6 +22,7 @@ gem 'simple_form', github: 'heartcombo/simple_form'
 gem 'slim-rails'
 
 gem_group :development, :test do
+  gem 'annotaterb'
   gem 'dotenv-rails'
   gem 'factory_bot_rails'
   gem 'pry-byebug'
@@ -163,6 +164,7 @@ after_bundle do
   rails_command 'db:drop db:create db:migrate'
   generate('simple_form:install', '--bootstrap')
   generate('pundit:install')
+  generate('annotate_rb:install')
   generate(:controller, 'pages', 'home', '--skip-routes', '--no-test-framework')
   # Routes
   ########################################
