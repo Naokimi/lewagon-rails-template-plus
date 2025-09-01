@@ -180,6 +180,7 @@ after_bundle do
     .DS_Store
 
     /node_modules
+    /coverage
   TXT
 
   # Devise install + user
