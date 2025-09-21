@@ -193,7 +193,9 @@ after_bundle do
   run 'rm app/controllers/application_controller.rb'
   file 'app/controllers/application_controller.rb', <<~RUBY
     class ApplicationController < ActionController::Base
-    before_action :authenticate_user!
+      include Pundit::Authorization
+
+      before_action :authenticate_user!
     end
   RUBY
 
@@ -228,8 +230,8 @@ after_bundle do
   generate('rspec:install')
   inject_into_file 'spec/spec_helper.rb', before: '# This file was generated' do
     <<-RUBY
-      require 'simplecov'
-      SimpleCov.start 'rails'
+    require 'simplecov'
+    SimpleCov.start 'rails'
     RUBY
   end
 
