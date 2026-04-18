@@ -347,19 +347,32 @@ after_bundle do
         - 'lib/**/*'
         - 'node_modules/**/*'
         - 'tmp/**/*'
-      Style/FrozenStringLiteralComment:
-        Enabled: false
-      Style/Documentation:
-        Enabled: false
-      Metrics/MethodLength:
-        Max: 15
-      Metrics/AbcSize:
-        Max: 20
-      Layout/LineLength:
-        Max: 120
-      Metrics/BlockLength:
-        Exclude:
-          - 'spec/**/*'
+
+    Style/FrozenStringLiteralComment:
+      Enabled: false
+
+    Style/Documentation:
+      Enabled: false
+
+    Metrics/MethodLength:
+      Enabled: true
+      Max: 15
+
+    Metrics/AbcSize:
+      Enabled: true
+      Max: 30
+
+    Layout/LineLength:
+      Enabled: true
+      Max: 120
+      Exclude:
+        - 'db/seeds.rb'
+        - 'spec/**/*'
+
+    Metrics/BlockLength:
+      Enabled: true
+      Exclude:
+        - 'spec/**/*'
   YML
 
   # Git
